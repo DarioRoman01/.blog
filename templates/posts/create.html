@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>Create new post</title>
+{% endblock %}
+
+{% block container %}
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-6 pt-3 pb-3" id="profile-box">
+                <h4 class="mb-4">Create a new post!</h4>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="user" value="{{ user.pk}}" />
+                    <input type="hidden" name="profile" value="{{ profile.pk }}" />
+
+                    {# title field #}
+                    <div class="form-group">
+                        <input
+                            class="form-control {% if form.title.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="title"
+                            placeholder="Title"
+                            value="{% if form.title.value %}{{ form.title.value }}{% endif %}"
+                        >
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}{{ error }}{% endfor %}
+                        </div>
+                    </div>
+
+                    {# Picture field #}
+                    <div class="form-group mt-4">
+                        <label>Choose your photo:</label>
+                        <input
+                            class="form-control {% if form.picture.errors %}is-invalid{% endif %}"
+                            type="file"
+                            name="picture"
+                            placeholder="Picture"
+                            value="{{ form.picture.value }}"
+                        >
+                        <div class="invalid-feedback">
+                            {% for error in form.picture.errors %}{{ error }}{% endfor %}
+                        </div>
+                    </div>
+
+                    {# Resume field #}
+                    <div class="form-group mt-4">
+                        <label>Resume:</label>
+                        <input
+                            class="form-control {% if form.resume.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="resume"
+                            placeholder="resume"
+                            value="{% if form.resume.value %}{{ form.resume.value }}{% endif %}"
+                        > 
+                        <div class="invalid-feedback">
+                            {% for error in form.resume.errors %}{{ error }}{% endfor %}
+                        </div>  
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <label>Content:</label>
+                        <textarea 
+                            class="form-control {% if form.content.errors %}is-invalid{% endif %}" 
+                            name="content" 
+                        >{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary btn-block mt-5">Publish!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>BlogPost | Delete</title>
+{% endblock %}
+
+{% block container %}
+    <form action="{% url 'posts:delete' post.id %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <h2>You really want to delete this post {{ post.title }}?</h2>
+            </div>
+        </div>
+    
+        <div class="d-grid">
+            <input type="submit" class="btn btn-lg btn-secondary mt-5" value="yes">
+            <a href="{% url 'posts:feed' %}" class="btn btn-lg btn-secondary mt-3">Cancel</a>
+        </div>
+
+    </form>
+{% endblock %}

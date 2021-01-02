@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+    <title>BlogPost | Update</title>
+{% endblock %}
+
+{% block container %}
+    <form class="mt-5" action="{% url 'users:update' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <input type="hidden" name="user" value="{{ user.pk}}" />
+
+        {# picture input #}
+        <div class="form-group">
+            <label for="formFile" class="form-label">Choose your photo</label>
+            <input class="form-control" type="file" name="picture">
+        </div>
+
+        {# biography input #}
+        <div class="form-group mt-4">
+            <label for="exampleFormControlTextarea1" class="form-label">biography</label>
+            <textarea class="form-control" name="biography">{{ form.biography.value }}</textarea>
+        </div>
+
+        <div class="d-grid">
+            <button class="btn btn-lg btn-secondary mt-5" type="submit">Update</button>
+        </div>
+    </form>
+{% endblock %}

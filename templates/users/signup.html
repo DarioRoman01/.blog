@@ -1,0 +1,112 @@
+{% extends "users/base.html" %}
+
+{% block head_content %}
+    <title>BlogPost | Signup</title>
+{% endblock %}
+
+{% block container %}
+
+
+    <form action="{% url 'users:signup' %}" method="POST">
+        {% csrf_token %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {# username field #}
+            <div class="form-group">
+                <input
+                    class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                    type="text"
+                    name="username"
+                    placeholder="username"
+                    value="{% if form.errors %}{{ form.username.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+            {# password_field field #}
+            <div class="form-group mt-4">
+                <input
+                    class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                    type="password"
+                    name="password"
+                    placeholder="password"
+                    value="{% if form.errors %}{{ form.password.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+             {# password_confirmation field #}
+             <div class="form-group mt-4">
+                <input
+                    class="form-control {% if form.password_confirmation.errors %}is-invalid{% endif %}"
+                    type="password"
+                    name="password_confirmation"
+                    placeholder="password confirmation"
+                    value="{% if form.errors %}{{ form.password_confirmation.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.password_confirmation.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+            {# first_name field #}
+            <div class="form-group mt-4">
+                <input
+                    class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                    type="text"
+                    name="first_name"
+                    placeholder="First name"
+                    value="{% if form.errors %}{{ form.first_name.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.first_name.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+            {# last_name field #}
+            <div class="form-group mt-4">
+                <input
+                    class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                    type="text"
+                    name="last_name"
+                    placeholder="Last name"
+                    value="{% if form.errors %}{{ form.last_name.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.last_name.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+
+            {# Email field #}
+            <div class="form-group mt-4">
+                <input
+                    class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                    type="text"
+                    name="email"
+                    placeholder="Email"
+                    value="{% if form.errors %}{{ form.email.value }}{% endif %}"
+                >
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                </div>
+            </div>
+
+
+            <div class="d-grid">
+                <button class="btn btn-lg btn-secondary mt-5" type="submit">Sign Up!</button>
+            </div>
+
+        <p class="mt-4">You already have an acoount? <a href="{% url 'users:login' %}">Sign in here uwu</a></p>
+
+
+    </form>
+
+
+{% endblock %}

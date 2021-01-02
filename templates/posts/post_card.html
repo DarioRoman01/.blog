@@ -1,0 +1,47 @@
+{% load static %}
+<div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-0 post-container">
+    
+    
+    <div class="card  pt-3 pl-3 pb-1">
+        <div class="row d-flex align-items-center g-0">
+            <div class="col-1">
+                <a href="{% url "users:detail" post.user.username %}">
+                    {% if post.profile.picture %}
+                    <img class=" rounded-circle" height="35" src="{{ post.profile.picture.url }}" alt="{{ post.user.get_full_name }}">
+                    {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" height="35" class="d-inline-block align-top rounded-circle"/>
+                    {% endif %}
+                </a>  
+            </div>
+
+            <div class="col-8">
+                <div class="card-body mt-4">
+                    <p>{{ post.user.get_full_name  }}</p>
+                </div>
+            </div>
+            {% if request.user == post.user %}
+            <div class="col-2">
+                <a href="{% url 'posts:delete' post.id %}" class="btn  btn-secondary mt-3">Delete</a> 
+            </div>
+            <div class="col-1">
+                <a href="{% url 'posts:update' post.id %}" class="btn  btn-secondary mt-3">Update</a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <img style="width: 100%;" src="{{ post.picture.url }}" alt="{{ post.title }}">
+
+    <p><strong>{{ post.resume }}</strong></p>
+
+    <div class="d-grid">
+        <a href="{% url 'posts:detail' post.id %}" class="btn btn-lg btn-secondary mt-5">Full Post</a> 
+    </div>
+    <!-- {% if request.user == post.user %}
+    <div class="d-grid">
+        <a href="{% url 'posts:update' post.id %}" class="btn btn-lg btn-secondary mt-5">Update Post</a>
+    </div>
+    {% endif %} -->
+
+</div>
