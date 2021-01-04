@@ -31,5 +31,10 @@ urlpatterns = [
         route='posts/<int:id>/update',
         view=views.UpdatePostView.as_view(),
         name='update'
+    ),
+    path(
+        route='posts/<int:id>/comments',
+        view=views.AddCommentView.as_view(),
+        name='comment'
     )
 ]

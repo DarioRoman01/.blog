@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+<title>Add Comment</title>
+{% endblock %}
+
+{% block container %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-md-center">
+            <div class="col-6 pt-3 pb-3" id="profile-box">
+                <h4 class="mb-4">Add Comment</h4>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="user" value="{{ user.pk}}" />
+                    <input type="hidden" name="profile" value="{{ profile.pk }}" />
+                    <input type="hidden" name="post" value="{{ post.pk }}">
+
+                    <div class="form-group mt-4">
+                        <label>Content:</label>
+                        <textarea 
+                            class="form-control {% if form.content.errors %}is-invalid{% endif %}" 
+                            name="content" 
+                        >{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary btn-block mt-5">Publish!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

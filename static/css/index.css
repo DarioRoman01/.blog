@@ -11,3 +11,8 @@
     background: #fff;
     border-bottom: 3px solid rgba(0,0,0,.0975);
 }
+
+#comments {
+    /* background-color: #adb5bd; */
+    border: 2px solid #bfbdc1;
+}

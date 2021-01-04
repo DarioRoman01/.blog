@@ -28,4 +28,14 @@
     <div class="col-12">
         <p>{{ post.content }}</p>
     </div>
+
+    <div class="col-12">
+        {% for comment in comments %}
+            {% include "comments/comments_card.html" %}
+        {% endfor %}
+    </div>
+    
+    <div class="d-grid">
+        <a href="{% url 'posts:comment' post.id %}" class="btn btn-lg btn-secondary mt-5">Add comment</a> 
+    </div>
 </div>

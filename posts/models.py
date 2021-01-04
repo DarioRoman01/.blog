@@ -25,4 +25,17 @@ class Post(models.Model):
     def __str__(self):
         """Return user and title."""
         return '{} by @ {}'.format(self.title, self.user.username)
+
+class Comment(models.Model):
+    """Comments model."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey('users.Profile', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    content = models.CharField(max_length=255)
+
+    def __str__(self):
+        return 'comment by @{}'.format(self.user.username)
+    
     

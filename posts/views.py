@@ -21,7 +21,7 @@ from django.views.generic import (
 from posts.forms import CreatePostForm
 
 # Models
-from posts.models import Post
+from posts.models import Post, Comment
 from users.models import Profile
 from django.contrib.auth.models import User
 
@@ -67,6 +67,15 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         id_ = self.kwargs.get("id")
         return get_object_or_404(Post, id=id_)
 
+    def get_context_data(self, **kwargs):
+        """add comments to the context."""
+        context = super().get_context_data(**kwargs)
+        id_ = self.kwargs.get("id")
+        post = Post.objects.get(pk=id_)
+        context["comments"] = post.comment_set.all()
+        return context
+    
+
 class DeletePostView(LoginRequiredMixin, DeleteView):
     """Delete post view."""
     template_name = 'posts/delete.html'
@@ -101,3 +110,28 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
         context['user'] = self.request.user
         context['profile'] = self.request.user.profile 
         return context
+
+class AddCommentView(LoginRequiredMixin, CreateView):
+    """Add comment view."""
+    template_name = 'comments/new.html'
+    model = Comment
+    fields = ['user', 'profile', 'post', 'content']
+
+    def get_object(self):
+        """Get post id."""
+        id_ = self.kwargs.get("id")
+        return get_object_or_404(Post, id=id_)
+
+    def get_context_data(self, **kwargs):
+        """add users, profile and post to the context."""
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['profile'] = self.request.user.profile
+        id_ = self.kwargs.get("id")
+        context['post'] = Post.objects.get(pk=id_)   
+        return context
+
+    def get_success_url(self):
+        id_ = self.kwargs.get("id")
+        return reverse('posts:detail', kwargs={'id': id_})
+    

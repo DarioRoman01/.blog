@@ -84,6 +84,7 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+uwu-env/
 env/
 venv/
 ENV/
@@ -100,9 +101,13 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# local stuff
+pictures/
+
 # mypy
 .mypy_cache/
 
 # Django
+migrations/
 db.sqlite3
 media/
