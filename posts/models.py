@@ -19,6 +19,9 @@ class Post(models.Model):
 
     content = models.TextField()
 
+    like = models.ManyToManyField(User, related_name='like')
+    likes = models.PositiveIntegerField(default=0)
+
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -37,5 +40,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'comment by @{}'.format(self.user.username)
-    
     

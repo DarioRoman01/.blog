@@ -22,8 +22,11 @@
         </div>
 
     <img style="width: 100%;" src="{{ post.picture.url }}" alt="{{ post.title }}">
-
-    <p><strong>{{ post.resume }}</strong></p>
+    
+    <div class="row">
+        <p class="col-6"><strong>{{ post.resume }}</strong></p>
+        <p class="col-3 offset-md-3"><strong>Likes: {{ post.likes }}</strong></p>
+    </div>
 
     <div class="col-12">
         <p>{{ post.content }}</p>
@@ -34,8 +37,29 @@
             {% include "comments/comments_card.html" %}
         {% endfor %}
     </div>
-    
-    <div class="d-grid">
-        <a href="{% url 'posts:comment' post.id %}" class="btn btn-lg btn-secondary mt-5">Add comment</a> 
+    <div class="row">
+
+        <div class="col-6">
+            <a href="{% url 'posts:comment' post.id %}" class="btn btn-lg btn-secondary mt-5">Add comment</a> 
+        </div>
+        <div class="col-6">
+            <form action="{% url 'posts:like' post.id %}" method="POST">
+                {% csrf_token %}
+                
+                {% if liked %}
+
+                    <button class="btn btn-lg btn-danger mt-5 " type="submit" name="post_id" value="{{ post.id }}">
+                        Unlike
+                    </button>
+
+                {% else %}
+
+                    <button class="btn btn-lg btn-secondary mt-5 " type="submit" name="post_id" value="{{ post.id }}">
+                        Like
+                    </button>
+
+                {% endif %}
+            </form>
+        </div>
     </div>
 </div>

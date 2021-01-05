@@ -36,5 +36,10 @@ urlpatterns = [
         route='posts/<int:id>/comments',
         view=views.AddCommentView.as_view(),
         name='comment'
+    ),
+    path(
+        route='posts/<int:id>/like',
+        view=views.LikeView,
+        name='like'
     )
 ]

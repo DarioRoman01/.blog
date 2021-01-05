@@ -2,11 +2,11 @@
 
 # Django 
 from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Views and auth_views
-from django.contrib.auth import views as auth_views
+# Views 
 from django.views.generic import (
     UpdateView,
     FormView,
@@ -14,7 +14,8 @@ from django.views.generic import (
     CreateView,
     ListView,
     DeleteView,
-    UpdateView
+    UpdateView,
+    View
 )
 
 # Forms
@@ -68,10 +69,18 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return get_object_or_404(Post, id=id_)
 
     def get_context_data(self, **kwargs):
-        """add comments to the context."""
+        """add likes and comments to the context."""
         context = super().get_context_data(**kwargs)
         id_ = self.kwargs.get("id")
         post = Post.objects.get(pk=id_)
+
+        """Check if the user already liked the post."""
+        liked = False
+        if post.like.filter(id=self.request.user.id).exists():
+            liked = True
+
+        """add context."""
+        context['liked'] = liked
         context["comments"] = post.comment_set.all()
         return context
     
@@ -135,3 +144,26 @@ class AddCommentView(LoginRequiredMixin, CreateView):
         id_ = self.kwargs.get("id")
         return reverse('posts:detail', kwargs={'id': id_})
     
+
+def LikeView(request, id):
+    """Like view."""
+
+    """Get the especific post."""
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    liked = False
+
+    """Check if the user already liked the post."""
+    if post.like.filter(id=request.user.id).exists():
+        post.like.remove(request.user)
+        liked = False
+        post.likes -= 1
+        post.save()
+
+    else:
+        post.like.add(request.user)
+        liked = True
+        post.likes += 1
+        post.save()
+
+    """Redirect to post detail."""
+    return HttpResponseRedirect(reverse('posts:detail', kwargs={'id': request.POST.get('post_id')})) 
