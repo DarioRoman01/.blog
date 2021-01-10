@@ -1,0 +1,23 @@
+{% load static %}
+<a href="{% url "users:detail" user.username %}" style="text-decoration: none; color: black;">
+    <div class="card mt-5 mb-3" style="border: 1px solid #bfbdc1;" >
+    <div class="row g-0">
+        <div class="col-md-4">
+        
+            {% if user.profile.picture %}
+            <img class=" pt-1 rounded-circle" height="150" src="{{ user.profile.picture.url }}" alt="{{ user.get_full_name }}">
+            {% else %}
+            <img src="{% static 'images/default-profile.png' %}" height="35" class="d-inline-block align-top rounded-circle"/>
+            {% endif %}
+        
+        </div>
+        <div class="col-md-8">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.get_full_name }}</h5>
+            <p class="card-text">{{ user.profile.biography }}</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+</a>  

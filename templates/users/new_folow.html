@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block head_content %}
+    <title>BlogPost</title>
+{% endblock%}
+
+{% block container %}
+
+    <div class="container">
+        <div class="row">
+
+            {% for user in users %}
+                {% include "users/user_card.html" %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

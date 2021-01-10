@@ -13,7 +13,7 @@
                     <a href="{% url "users:detail" request.user.username %}">
                         {% if request.user.profile.picture %}
                             <img src="{{ request.user.profile.picture.url }}" height="35" class="d-inline-block align-top rounded-circle"/>
-                        {% else%}
+                        {% else %}
                             <img src="{% static 'images/default-profile.png' %}" height="35" class="d-inline-block align-top rounded-circle"/>
                         {% endif %}
                     </a>
@@ -28,6 +28,12 @@
                 <li class="nav-item nav-icon">
                     <a href="{% url "users:logout" %}">
                         <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </li>
+                
+                <li class="nav-item nav-icon">
+                    <a href="{% url 'users:explore' %}">
+                        <i class="far fa-address-card"></i>
                     </a>
                 </li>
 

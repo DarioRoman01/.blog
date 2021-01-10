@@ -26,6 +26,11 @@ urlpatterns = [
         name='follow'
     ),
     path(
+        route='explore/people',
+        view=views.UsersToFollowView.as_view(),
+        name='explore'
+    ),
+    path(
         route='me/update',
         view=views.UpdateProfileView.as_view(),
         name='update'

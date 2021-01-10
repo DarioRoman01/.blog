@@ -11,7 +11,8 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import (
     UpdateView,
     FormView,
-    DetailView
+    DetailView,
+    ListView
 )
 
 # Forms
@@ -84,7 +85,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         user_from = self.request.user
 
         follows = False
-        if user_from.follow.filter(id=self.request.user.id).exists():
+        if user_from.follow.filter(id=user.id).exists():
             follows = True
 
         context['follows'] = follows
@@ -112,7 +113,26 @@ def FollowView(request, username):
 
     return HttpResponseRedirect(reverse('users:detail', kwargs={'username': request.POST.get('user_username')}))
 
-    
 
+class UsersToFollowView(LoginRequiredMixin, ListView):
+    """Users to follow view, return all the users that the requesting
+    user is not following."""
 
+    template_name = 'users/new_folow.html'
+    model = User
+    ordering = ('-created',)
+    paginate_by = 30
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        user = self.request.user
+
+        id_list = []
+        follow_list = list(user.follow.all())
+
+        for i in follow_list:
+            id_list.append(i.id)
+        id_list.append(user.id)
+        
+        return User.objects.exclude(id__in=id_list)
     

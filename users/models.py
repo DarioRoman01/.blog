@@ -27,4 +27,5 @@ class Profile(models.Model):
         return self.user.username
     
 
+"""add follow field to user class dynamically"""
 User.add_to_class('follow', models.ManyToManyField('self', related_name='following', symmetrical=False))

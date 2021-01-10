@@ -59,6 +59,18 @@ class PostFeedView(LoginRequiredMixin, ListView):
     paginate_by = 30
     context_object_name = 'posts'
 
+    def get_queryset(self):
+        """Filter the posts by the users that the requesting user is following."""
+        user = self.request.user
+        id_list = []
+        follow_list = list(user.follow.all())
+
+        for i in follow_list:
+            id_list.append(i.id)
+
+        return Post.objects.filter(user_id__in=id_list)
+    
+
 class PostDetailView(LoginRequiredMixin, DetailView):
     """Post detail view. return a especific post."""
 
@@ -165,5 +177,4 @@ def LikeView(request, id):
         post.likes += 1
         post.save()
 
-    """Redirect to post detail."""
     return HttpResponseRedirect(reverse('posts:detail', kwargs={'id': request.POST.get('post_id')})) 
