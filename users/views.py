@@ -3,6 +3,7 @@
 # Django 
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Views and auth_views
@@ -76,12 +77,40 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
-        """Add user's posts to context."""
+        """Add user's posts to context and check if the requesting user(user_from)
+         already follows the user(user)"""
         context = super().get_context_data(**kwargs)
         user = self.get_object()
+        user_from = self.request.user
+
+        follows = False
+        if user_from.follow.filter(id=self.request.user.id).exists():
+            follows = True
+
+        context['follows'] = follows
         context['posts'] = Post.objects.filter(user=user).order_by('-created')
         return context
 
+def FollowView(request, username):
+    """Follow view."""
+
+    user = get_object_or_404(User, username=request.POST.get('user_username'))
+    user_from = request.user
+    follows = False
+
+    if user_from.follow.filter(id=user.id).exists():
+        user_from.follow.remove(user)
+        follows = False
+        user.profile.followers -= 1
+        user.profile.save()
+
+    else:
+        user_from.follow.add(user)
+        follows = True
+        user.profile.followers += 1
+        user.profile.save()
+
+    return HttpResponseRedirect(reverse('users:detail', kwargs={'username': request.POST.get('user_username')}))
 
     
 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head_content %}
-<title>@{{ user.username }} | Platzigram</title>
+<title>@{{ user.username }} | .Blog</title>
 {% endblock %}
 
 {% block container %}
@@ -29,12 +29,18 @@
                             Edit profile
                         </a>
                     {% else %}
-                        <a
-                            href=""
-                            class="ml-5 btn btn-sm btn-primary"
-                        >
-                            Follow
-                        </a>
+                    <form action="{% url 'users:follow' user.username %}" method="POST">
+                        {% csrf_token %}
+
+                        <button class="btn btn-lg btn-secondary mt-5 " type="submit" name="user_username" value="{{ user.username }}">
+                            {% if follows %}
+                                Unfollow
+                            {% else %}
+                                Follow
+                            {% endif %}
+                        </button>
+
+                    </form>
                     {% endif %}
                 </h2>
 
@@ -43,10 +49,10 @@
                         <b>{{ user.profile.blog_posted }}</b> Posts
                     </div>
                     <div class="col-sm-4">
-                        <b>{{ user.first_name }}</b> 
+                        <b>{{ user.profile.followers }}</b> Followers
                     </div>
                     <div class="col-sm-4">
-                        <b>{{ user.last_name }}</b> 
+                        <b>{{ user.get_full_name }}</b> 
                     </div>
                 </div>
                 <div class="row mt-4">

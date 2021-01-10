@@ -19,9 +19,12 @@ class Profile(models.Model):
         blank=True,
         null=True
     )
-
+    
+    followers = models.PositiveIntegerField(default=0)
     blog_posted = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.user.username
     
+
+User.add_to_class('follow', models.ManyToManyField('self', related_name='following', symmetrical=False))
