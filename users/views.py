@@ -55,8 +55,16 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     queryset = Profile.objects.all()
 
     def get_success_url(self):
-        username = self.request.user.username
-        return reverse('users:detail', kwargs={'username': username})
+        """Check if the user follow people. if the user follow other user,
+        its redirect normaly to his own profile, if hes not follow someone
+        its redirect to explore view to follow users, yes its work like a middleware""" 
+
+        user = self.request.user
+        follow_list = list(user.follow.all())
+        if len(follow_list) == 0:
+            return reverse_lazy('users:explore')
+        else:
+            return reverse('users:detail', kwargs={'username': user.username})
 
     def get_object(self):
         """Return user's profile."""
