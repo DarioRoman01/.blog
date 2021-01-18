@@ -41,6 +41,7 @@ class LoginView(auth_views.LoginView):
     template_name = 'users/login.html'
 
 class LogoutView(auth_views.LogoutView):
+    """Log out view."""
     template_name = 'users/logged_out.html'
 
 
@@ -71,6 +72,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user.profile
 
     def get_context_data(self, **kwargs):
+        """Add user to the context."""
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user 
         return context
@@ -101,23 +103,25 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         return context
 
 def FollowView(request, username):
-    """Follow view."""
+    """Follow view. Chek if the requesting user(user_from) already
+     follow the user(user_to) and add or substract 1 to followers counter 
+     of the user."""
 
-    user = get_object_or_404(User, username=request.POST.get('user_username'))
+    user_to = get_object_or_404(User, username=request.POST.get('user_username'))
     user_from = request.user
     follows = False
 
-    if user_from.follow.filter(id=user.id).exists():
-        user_from.follow.remove(user)
+    if user_from.follow.filter(id=user_to.id).exists():
+        user_from.follow.remove(user_to)
         follows = False
-        user.profile.followers -= 1
-        user.profile.save()
+        user_to.profile.followers -= 1
+        user_to.profile.save()
 
     else:
-        user_from.follow.add(user)
+        user_from.follow.add(user_to)
         follows = True
-        user.profile.followers += 1
-        user.profile.save()
+        user_to.profile.followers += 1
+        user_to.profile.save()
 
     return HttpResponseRedirect(reverse('users:detail', kwargs={'username': request.POST.get('user_username')}))
 
@@ -133,6 +137,9 @@ class UsersToFollowView(LoginRequiredMixin, ListView):
     context_object_name = 'users'
 
     def get_queryset(self):
+        """return all users, excluding the users that the
+        requesting user already follow."""
+
         user = self.request.user
 
         id_list = []

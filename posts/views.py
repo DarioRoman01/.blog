@@ -8,14 +8,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Views 
 from django.views.generic import (
-    UpdateView,
-    FormView,
     DetailView,
     CreateView,
     ListView,
     DeleteView,
     UpdateView,
-    View
 )
 
 # Forms
@@ -44,8 +41,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         """added 1 to blog_posted counter of the user"""
-        username = self.request.user.username
-        profile = Profile.objects.get(user__username=username)
+        profile = Profile.objects.get(user__username=self.request.user.username)
         profile.blog_posted += 1
         profile.save()
         return super().post(request, *args, **kwargs)
@@ -55,18 +51,21 @@ class PostFeedView(LoginRequiredMixin, ListView):
 
     template_name = 'posts/feed.html'
     model = Post
-    ordering = ('-created',)
+    ordering = ('created',)
     paginate_by = 30
     context_object_name = 'posts'
 
     def get_queryset(self):
-        """Filter the posts by the users that the requesting user is following."""
+        """Filter the posts by the users that the requesting user
+        is following and his own posts."""
+        
         user = self.request.user
         id_list = []
         follow_list = list(user.follow.all())
 
         for i in follow_list:
             id_list.append(i.id)
+        id_list.append(user.id)
 
         return Post.objects.filter(user_id__in=id_list)
     
@@ -91,7 +90,6 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         if post.like.filter(id=self.request.user.id).exists():
             liked = True
 
-        """add context."""
         context['liked'] = liked
         context["comments"] = post.comment_set.all()
         return context
