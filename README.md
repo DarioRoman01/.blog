@@ -1,24 +1,23 @@
-# .blog
-.blog is a django application, similar to instagram you can create, read, update and delete posts
+# .Blog
 
-# Usage
+Create a minimal project (inspired by instagram) in Django.
 
-python3 -m venv venv
+![](https://imgur.com/a/7qbeIQN)
 
-source venv/bin/activate
+## Dependencies
+Python 3
+Django
 
+## Usage
+```shell
+python3 -m venv .env
+source .env/bin/activate
 pip install -r requirements.txt
+```
 
-create a .env in blogpost/
-
-DEBUG= True or False if you want 
-
-SECRECT_KEY= Your secrest key
-
-ALLOWED_HOSTS= Your allowed hosts
-
+```python
 python manage.py makemigrations
-
 python manage.py migrate
-
 python manage.py runserver
+```
+
